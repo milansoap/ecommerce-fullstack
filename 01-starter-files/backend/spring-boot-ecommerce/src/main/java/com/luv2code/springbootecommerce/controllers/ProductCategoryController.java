@@ -1,9 +1,7 @@
 package com.luv2code.springbootecommerce.controllers;
 
-import com.luv2code.springbootecommerce.model.Product;
 import com.luv2code.springbootecommerce.model.ProductCategory;
 import com.luv2code.springbootecommerce.services.ProductCategoryService;
-import com.luv2code.springbootecommerce.services.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,7 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
-@CrossOrigin
+@CrossOrigin(origins = "http://localhost:4200")
 @RestController
 public class ProductCategoryController {
 

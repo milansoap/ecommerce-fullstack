@@ -5,6 +5,7 @@ import com.luv2code.springbootecommerce.model.Product;
 import com.luv2code.springbootecommerce.model.ProductCategory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
@@ -21,11 +22,19 @@ public class ProductService {
         return productRepository.findAll();
     }
 
+
+    public Page<Product> getProductsByPage(ProductCategory categoryId, int pageNumber, int pageSize, Pageable pageable) {
+        Pageable requestedPage = PageRequest.of(pageNumber, pageSize, pageable.getSort());
+        return productRepository.findByCategory(categoryId, requestedPage);
+    }
+
+
+
     public Page<Product> findByCategoryId(ProductCategory category, Pageable pageable){
         return productRepository.findByCategory(category, pageable);
     }
 
-    public Page<Product> findByNameContaining(String name, Pageable pageable) {
+    public Page<Product> findByNameContaining(String name,int pageNumber, int pageSize, Pageable pageable) {
         return productRepository.findByNameContaining(name, pageable);
     }
 

@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Optional;
 
-@CrossOrigin
+@CrossOrigin(origins = "http://localhost:4200")
 @RestController
 public class ProductController {
 
@@ -27,6 +27,22 @@ public class ProductController {
         return new ResponseEntity<>(products, HttpStatus.OK);
     }
 
+
+    @GetMapping("/products/category/{id}/{pageNumber}/{pageSize}")
+    public ResponseEntity<Page<Product>> getProductsPage(ProductCategory categoryId,
+                                                         @PathVariable int pageNumber,
+                                                         @PathVariable int pageSize,
+                                                         Pageable pageable) {
+        Page<Product> products = productService.getProductsByPage(categoryId, pageNumber, pageSize,pageable);
+        return new ResponseEntity<>(products, HttpStatus.OK);
+    }
+
+    @GetMapping("/category/{id}")
+    public ResponseEntity<Page<Product>> findByCategory(ProductCategory category, Pageable pageable) {
+        Page<Product> products = productService.findByCategoryId(category, pageable);
+        return new ResponseEntity<>(products, HttpStatus.OK);
+    }
+
     @GetMapping("products/{id}")
     public ResponseEntity<Product> getProductById(@PathVariable Long id) {
         Optional<Product> product = productService.findById(id);
@@ -37,21 +53,13 @@ public class ProductController {
         }
     }
 
-    @GetMapping("/category/{id}")
-    public ResponseEntity<Page<Product>> findByCategory(ProductCategory category, Pageable pageable) {
-        Page<Product> products = productService.findByCategoryId(category, pageable);
-        return new ResponseEntity<>(products, HttpStatus.OK);
-    }
-
-    @GetMapping("/productss")
-    public Page<Product> getProductsByName(@RequestParam("name") String name, Pageable pageable) {
-        return productService.findByNameContaining(name, pageable);
-    }
-
 
     @GetMapping("/products/search")
-    public ResponseEntity<Page<Product>> searchProductsByName(@RequestParam("name") String name, Pageable pageable) {
-        Page<Product> products = productService.findByNameContaining(name,pageable);
+    public ResponseEntity<Page<Product>> searchProductsByName(@PathVariable String name,
+                                                              @PathVariable int pageNumber,
+                                                              @PathVariable int pageSize,
+                                                              Pageable pageable) {
+        Page<Product> products = productService.findByNameContaining(name, pageNumber, pageSize, pageable);
         return new ResponseEntity<>(products, HttpStatus.OK);
     }
 
